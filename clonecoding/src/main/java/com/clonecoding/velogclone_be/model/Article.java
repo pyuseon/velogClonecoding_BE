@@ -46,7 +46,7 @@ public class Article extends Timestamped{
     public Article(ArticleRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
-        this.nickName = requestDto.getUserName();
+        this.nickName = requestDto.getNickName();
         this.imageFile = requestDto.getImageFile();
     }
 }
