@@ -13,7 +13,7 @@ public class DetailArticleResponseDto {
     private Long postingId;
     private String title;
     private String content;
-    private String userName;
+    private String nickName;
 //    private String imageFile;
     private List<String> tags;
     private List<Comment> comments;
@@ -23,7 +23,7 @@ public class DetailArticleResponseDto {
         this.postingId = article.getId();
         this.title = article.getTitle();
         this.content = article.getContent();
-        this.userName = article.getNickName();
+        this.nickName = article.getNickName();
         this.comments = article.getComments();
     }
 }

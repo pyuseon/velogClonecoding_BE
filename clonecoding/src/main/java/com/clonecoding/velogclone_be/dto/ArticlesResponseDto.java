@@ -16,7 +16,7 @@ public class ArticlesResponseDto {
     private String dayBefore;
     private int commentCnt;
 //    private String userImage;
-    private String userName;
+    private String nickName;
     private List<String> tag;
     private int like;
 
@@ -25,6 +25,6 @@ public class ArticlesResponseDto {
         this.imageFile = article.getImageFile();
         this.title = article.getTitle();
         this.content = article.getContent();
-        this.userName = article.getNickName();
+        this.nickName = article.getNickName();
     }
 }

@@ -46,7 +46,7 @@ public class ArticleService {
         articleResponseDto.setPostingId(saveArticle.getId());
         articleResponseDto.setTitle(saveArticle.getTitle());
         articleResponseDto.setContent(saveArticle.getContent());
-        articleResponseDto.setUserName(saveArticle.getNickName());
+        articleResponseDto.setNickName(saveArticle.getNickName());
         articleResponseDto.setImageFile(saveArticle.getImageFile());
         articleResponseDto.setTags(responseTags);
 
@@ -89,7 +89,7 @@ public class ArticleService {
         articleResponseDto.setPostingId(saveArticle.getId());
         articleResponseDto.setTitle(saveArticle.getTitle());
         articleResponseDto.setContent(saveArticle.getContent());
-        articleResponseDto.setUserName(saveArticle.getNickName());
+        articleResponseDto.setNickName(saveArticle.getNickName());
         articleResponseDto.setImageFile(saveArticle.getImageFile());
         articleResponseDto.setTags(responseTags);
 
