@@ -46,7 +46,7 @@ UserController {
 
     }
 
-    // 닉네임 중복 체크
+    // 닉네임 중복 체크 및 유효성 검사
     @PostMapping( "/user/nicknameCheck")
     public Boolean nicknameCheck(UserResponseDto requestDto) {
         Optional<User> user = Optional.ofNullable(userRepository.findByNickname(requestDto.getNickname()));
