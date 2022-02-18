@@ -1,6 +1,6 @@
 package com.clonecoding.velogclone_be.security;
 
-import com.miniproject2.bookcafe.security.jwt.JwtTokenUtils;
+import com.clonecoding.velogclone_be.security.jwt.JwtTokenUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 

@@ -20,6 +20,10 @@ public class UserDetailsImpl implements UserDetails {
     }
 
 
+    public String getNickname() {
+        return user.getNickname();
+    }
+
     @Override
     public String getPassword() {
         return user.getPassword();

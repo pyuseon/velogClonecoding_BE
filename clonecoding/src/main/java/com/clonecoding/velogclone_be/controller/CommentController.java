@@ -16,8 +16,4 @@ public class CommentController {
     private final CommentRepository commentRepository;
     private final ArticleRepository articleRepository;
 
-    @PostMapping("/api/comment")
-    public Comment createComment(@RequestBody CommentRequestDto commentRequestDto){
-
-    }
 }

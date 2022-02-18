@@ -14,8 +14,8 @@ public class ArticleController {
 
     private final ArticleService articleService;
 
-    @PostMapping("/api/posting")
-    public ArticleResponseDto creatArticle(@RequestBody ArticleRequestDto requestDto){
-        return articleService.creatArticle(requestDto);
-    }
+//    @PostMapping("/api/posting")
+//    public ArticleResponseDto creatArticle(@RequestBody ArticleRequestDto requestDto){
+//        return articleService.creatArticle(requestDto);
+//    }
 }

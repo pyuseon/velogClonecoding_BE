@@ -11,7 +11,8 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.Optional;
 
-import static com.miniproject2.bookcafe.security.jwt.JwtTokenUtils.*;
+import static com.clonecoding.velogclone_be.security.jwt.JwtTokenUtils.*;
+
 
 @Component
 public class JwtDecoder {

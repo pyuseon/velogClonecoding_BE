@@ -4,7 +4,9 @@ import lombok.Getter;
 
 @Getter
 public class SignupRequestDto {
+    // 이메일
     private String username;
+    // 닉네임
     private String nickname;
     private String password;
     private String checkPassword;

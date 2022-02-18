@@ -16,10 +16,10 @@ public class User  {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String userId;
+    private String username;
 
     @Column(nullable = false, unique = true)
-    private String username;
+    private String nickname;
 
     @Column(nullable = false)
     private String password;
@@ -29,9 +29,9 @@ public class User  {
     private List<Likes> likes;
 
 
-    public User(String username, String enPassword) {
-        this.userId = username;
+    public User(String username, String nickname, String enPassword) {
+        this.username = username;
+        this.nickname = nickname;
         this.password = enPassword;
     }
-
 }

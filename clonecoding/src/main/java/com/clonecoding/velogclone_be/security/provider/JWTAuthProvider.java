@@ -7,10 +7,9 @@ import com.clonecoding.velogclone_be.security.UserDetailsImpl;
 import com.clonecoding.velogclone_be.security.jwt.JwtDecoder;
 import com.clonecoding.velogclone_be.security.jwt.JwtPreProcessingToken;
 import lombok.RequiredArgsConstructor;
-
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
@@ -37,11 +36,6 @@ public class JWTAuthProvider implements AuthenticationProvider {
                 .orElseThrow(() -> new UsernameNotFoundException("Can't find " + username));;
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-    }
-
-    @Override
-    public org.springframework.security.core.Authentication authenticate(org.springframework.security.core.Authentication authentication) throws AuthenticationException {
-        return null;
     }
 
     @Override

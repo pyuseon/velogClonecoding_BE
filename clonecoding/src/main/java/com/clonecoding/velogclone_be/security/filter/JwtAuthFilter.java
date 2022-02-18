@@ -1,7 +1,8 @@
 package com.clonecoding.velogclone_be.security.filter;
 
-import com.miniproject2.bookcafe.security.jwt.HeaderTokenExtractor;
-import com.miniproject2.bookcafe.security.jwt.JwtPreProcessingToken;
+
+import com.clonecoding.velogclone_be.security.jwt.HeaderTokenExtractor;
+import com.clonecoding.velogclone_be.security.jwt.JwtPreProcessingToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;

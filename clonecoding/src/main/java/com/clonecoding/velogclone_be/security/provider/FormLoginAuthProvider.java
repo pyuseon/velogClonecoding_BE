@@ -1,6 +1,7 @@
 package com.clonecoding.velogclone_be.security.provider;
 
-import com.miniproject2.bookcafe.security.UserDetailsImpl;
+
+import com.clonecoding.velogclone_be.security.UserDetailsImpl;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

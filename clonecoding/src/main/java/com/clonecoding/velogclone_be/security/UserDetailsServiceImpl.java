@@ -1,9 +1,8 @@
 package com.clonecoding.velogclone_be.security;
 
+
 import com.clonecoding.velogclone_be.model.User;
 import com.clonecoding.velogclone_be.repository.UserRepository;
-import com.miniproject2.bookcafe.domain.User;
-import com.miniproject2.bookcafe.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
