@@ -13,8 +13,8 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final ArticleRepository articleRepository;
 
-    @Transactional
-    public
-
+//    @Transactional
+//    public
+//
 
 }

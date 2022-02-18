@@ -22,7 +22,7 @@ public class Comment extends Timestamped{
     private String comment;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "ARTICLE_ID")
     private Article article;
 

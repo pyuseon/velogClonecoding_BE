@@ -1,12 +1,15 @@
 package com.clonecoding.velogclone_be.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @NoArgsConstructor
+@Setter
 @Getter
 @Entity
 public class ArticleTag {
@@ -15,13 +18,13 @@ public class ArticleTag {
     @Id
     private Long articleTagId;
 
-    @JsonManagedReference
-    @ManyToOne
+    @JsonBackReference
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ARTICLE_ID")
     private Article article;
 
-    @JsonManagedReference
-    @ManyToOne
+    @JsonBackReference
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "TAG_ID")
     private Tag tag;
 

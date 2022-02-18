@@ -25,7 +25,7 @@ public class User  {
     private String password;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Likes> likes;
 
 
