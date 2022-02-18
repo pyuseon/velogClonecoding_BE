@@ -1,9 +1,7 @@
 package com.clonecoding.velogclone_be.dto;
 
 import com.clonecoding.velogclone_be.model.Article;
-import com.clonecoding.velogclone_be.model.ArticleTag;
 import com.clonecoding.velogclone_be.model.Comment;
-import com.clonecoding.velogclone_be.model.Likes;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,7 +23,7 @@ public class DetailArticleResponseDto {
         this.postingId = article.getId();
         this.title = article.getTitle();
         this.content = article.getContent();
-        this.userName = article.getUserName();
+        this.userName = article.getNickName();
         this.comments = article.getComments();
     }
 }

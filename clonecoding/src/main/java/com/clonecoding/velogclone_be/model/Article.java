@@ -26,7 +26,7 @@ public class Article extends Timestamped{
     private String content;
 
     @Column
-    private String userName;
+    private String nickName;
 
     @Column
     private String imageFile;
@@ -46,7 +46,7 @@ public class Article extends Timestamped{
     public Article(ArticleRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
-        this.userName = requestDto.getUserName();
+        this.nickName = requestDto.getUserName();
         this.imageFile = requestDto.getImageFile();
     }
 }

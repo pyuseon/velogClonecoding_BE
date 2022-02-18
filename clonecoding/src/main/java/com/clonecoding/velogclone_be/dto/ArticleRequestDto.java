@@ -11,6 +11,6 @@ public class ArticleRequestDto {
     private String title;
     private String content;
     private String imageFile;
-    private String userName;
+    private String nickName;
     private List<String> tag;
 }

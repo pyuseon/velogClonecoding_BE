@@ -11,7 +11,7 @@ public class ArticleResponseDto {
     private Long postingId;
     private String title;
     private String content;
-    private String userName;
+    private String nickName;
     private String imageFile;
     private List<String> tags;
 }

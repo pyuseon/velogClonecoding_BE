@@ -25,6 +25,6 @@ public class ArticlesResponseDto {
         this.imageFile = article.getImageFile();
         this.title = article.getTitle();
         this.content = article.getContent();
-        this.userName = article.getUserName();
+        this.userName = article.getNickName();
     }
 }
