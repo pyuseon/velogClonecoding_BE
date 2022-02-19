@@ -24,14 +24,18 @@ public class User  {
     @Column(nullable = false)
     private String password;
 
+    @Column
+    private String imgUrl;
+
     @JsonManagedReference
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Likes> likes;
 
 
-    public User(String username, String nickname, String enPassword) {
+    public User(String username, String nickname, String enPassword, String imgUrl) {
         this.username = username;
         this.nickname = nickname;
         this.password = enPassword;
+        this.imgUrl = imgUrl;
     }
 }

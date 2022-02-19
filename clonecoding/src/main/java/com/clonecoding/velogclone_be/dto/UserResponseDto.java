@@ -10,5 +10,6 @@ import lombok.Setter;
 public class UserResponseDto {
     private String username;
     private String nickname;
+    private String imgUrl;
 
 }

@@ -14,7 +14,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void registerUser(SignupRequestDto requestDto) {
+    public void registerUser(SignupRequestDto requestDto, String imgUrl) {
 
         //중복된 이메일(로그인 id)가 존재할 경우
         String username = requestDto.getUsername();
@@ -31,7 +31,7 @@ public class UserService {
 
         // 패스워드
         String enPassword = passwordEncoder.encode(requestDto.getPassword());
-        User user = new User(username,nickname,enPassword);
+        User user = new User(username,nickname,enPassword, imgUrl);
         userRepository.save(user); // DB 저장
 
     }
