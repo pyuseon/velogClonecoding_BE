@@ -14,5 +14,4 @@ public class SignupRequestDto {
     // 닉네임
     private String nickname;
     private String password;
-//    private String checkPassword;
 }

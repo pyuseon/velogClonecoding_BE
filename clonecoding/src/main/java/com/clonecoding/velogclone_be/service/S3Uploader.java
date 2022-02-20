@@ -1,7 +1,10 @@
 package com.clonecoding.velogclone_be.service;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +32,8 @@ public class S3Uploader {
     @Value("bookcafe-bucket")
     public String bucket;  // S3 버킷 이름
 
+    // 파일 변환 후 로컬에 저장 & 로컬 저장 파일 가져오기 (convert)->
+    // s3에 파일 전달하기(upload) & 로컬 파일 지우기 (removeNewfile)-> s3에 파일 저장 하기 (pus3s)
     public String upload(MultipartFile multipartFile, String dirName) throws IOException {
         File uploadFile = convert(multipartFile)  // 파일 변환할 수 없으면 에러
                 .orElseThrow(() -> new IllegalArgumentException("error: MultipartFile -> File convert fail"));
@@ -70,5 +75,21 @@ public class S3Uploader {
         }
 
         return Optional.empty();
+    }
+
+
+    // https://bamdule.tistory.com/178
+    // s3 파일 지우기
+    public void delete(String key) {
+        try {
+            //Delete 객체 생성
+            DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(this.bucket, key);
+            //Delete
+            this.amazonS3Client.deleteObject(deleteObjectRequest);
+            System.out.println(String.format("[%s] deletion complete", key));
+
+        } catch (AmazonServiceException e) {
+            e.printStackTrace();
+        }
     }
 }
