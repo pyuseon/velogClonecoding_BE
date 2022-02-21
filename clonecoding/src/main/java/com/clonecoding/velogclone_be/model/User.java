@@ -16,22 +16,26 @@ public class User  {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String userId;
+    private String username;
 
     @Column(nullable = false, unique = true)
-    private String username;
+    private String nickname;
 
     @Column(nullable = false)
     private String password;
+
+    @Column
+    private String imgUrl;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Likes> likes;
 
 
-    public User(String username, String enPassword) {
-        this.userId = username;
+    public User(String username, String nickname, String enPassword, String imgUrl) {
+        this.username = username;
+        this.nickname = nickname;
         this.password = enPassword;
+        this.imgUrl = imgUrl;
     }
-
 }
