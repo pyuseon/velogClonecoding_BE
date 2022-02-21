@@ -85,9 +85,7 @@ public class UserController {
         User user =  userRepository.findById(userId).orElseThrow(
                 () -> new IllegalArgumentException("모임이 존재하지 않습니다. ")
         );
-
         s3Uploader.deleteS3(user.getImgUrl());
-
         userRepository.deleteById(userId);
         return userId;
     }

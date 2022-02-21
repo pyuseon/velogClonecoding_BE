@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 @RestControllerAdvice
 public class RestApiExceptionHandler {
 
-    @ExceptionHandler(value = { IllegalArgumentException.class, NoSuchElementException.class })
+    @ExceptionHandler(value = {IllegalArgumentException.class})
     public ResponseEntity<Object> handleApiRequestException(IllegalArgumentException ex) {
         RestApiException restApiException = new RestApiException();
         restApiException.setHttpStatus(HttpStatus.BAD_REQUEST);
