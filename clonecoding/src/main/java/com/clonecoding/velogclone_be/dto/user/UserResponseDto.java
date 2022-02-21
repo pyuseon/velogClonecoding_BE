@@ -1,4 +1,4 @@
-package com.clonecoding.velogclone_be.dto;
+package com.clonecoding.velogclone_be.dto.user;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,6 +1,6 @@
 package com.clonecoding.velogclone_be.model;
 
-import com.clonecoding.velogclone_be.dto.ArticleRequestDto;
+import com.clonecoding.velogclone_be.dto.article.ArticleRequestDto;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

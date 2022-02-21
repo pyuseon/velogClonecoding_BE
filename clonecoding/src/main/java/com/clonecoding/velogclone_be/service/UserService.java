@@ -1,6 +1,6 @@
 package com.clonecoding.velogclone_be.service;
 
-import com.clonecoding.velogclone_be.dto.SignupRequestDto;
+import com.clonecoding.velogclone_be.dto.user.SignupRequestDto;
 import com.clonecoding.velogclone_be.model.User;
 import com.clonecoding.velogclone_be.repository.UserRepository;;
 import lombok.RequiredArgsConstructor;

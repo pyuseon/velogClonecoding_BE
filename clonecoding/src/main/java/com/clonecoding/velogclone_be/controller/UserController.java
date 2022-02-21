@@ -1,7 +1,7 @@
 package com.clonecoding.velogclone_be.controller;
 
-import com.clonecoding.velogclone_be.dto.SignupRequestDto;
-import com.clonecoding.velogclone_be.dto.UserResponseDto;
+import com.clonecoding.velogclone_be.dto.user.SignupRequestDto;
+import com.clonecoding.velogclone_be.dto.user.UserResponseDto;
 import com.clonecoding.velogclone_be.model.User;
 import com.clonecoding.velogclone_be.repository.UserRepository;
 import com.clonecoding.velogclone_be.security.UserDetailsImpl;
@@ -13,41 +13,17 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Optional;
 
 
 @RestController
 @RequiredArgsConstructor
-public class
-UserController {
+public class UserController {
 
     private final UserService userService;
     private final UserRepository userRepository;
     private final S3Uploader s3Uploader;
-
-
-    //회원가입
-//    @PostMapping("/user/signup")
-//    public void registerUser(@RequestBody SignupRequestDto requestDto) {
-//        System.out.println(requestDto.getUsername());
-//        System.out.println(requestDto.getNickname());
-//        userService.registerUser(requestDto);
-//    }
-
-
-//    @PostMapping("/user/signup")
-//    public String registerUser(@RequestPart(value = "images", required = false) MultipartFile multipartFile,
-//                               @RequestPart("data") SignupRequestDto requestDto) throws IOException {
-//        // 기본 이미지
-//            String imgUrl = "https://bookcafe-bucket.s3.ap-northeast-2.amazonaws.com/signup/ca0d237c-6f48-42a2-a04b-bd999ea3b9f5noImage.png";
-//            if(!multipartFile.isEmpty()){
-//                imgUrl = s3Uploader.upload(multipartFile, "signup");
-//            }
-//
-//            userService.registerUser(requestDto, imgUrl);
-//        return "회원가입 성공!";
-//    }
-
 
     @PostMapping("/user/signup")
     public String registerUser(@RequestParam("username") String username,
@@ -105,10 +81,13 @@ UserController {
 
     // 회원 삭제하기
     @DeleteMapping("/user/{userId}")
-    public Long deletUser(@PathVariable Long userId){
+    public Long deletUser(@PathVariable Long userId) throws UnsupportedEncodingException {
         User user =  userRepository.findById(userId).orElseThrow(
                 () -> new IllegalArgumentException("모임이 존재하지 않습니다. ")
         );
+
+        s3Uploader.deleteS3(user.getImgUrl());
+
         userRepository.deleteById(userId);
         return userId;
     }
