@@ -1,5 +1,6 @@
 package com.clonecoding.velogclone_be.dto;
 
+import com.clonecoding.velogclone_be.model.Image;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public class ArticleRequestDto {
     private String title;
     private String content;
-    private String imageFile;
-    private String nickName;
+    private List<String> imageFiles;
+    private String nickname;
     private List<String> tag;
 }
