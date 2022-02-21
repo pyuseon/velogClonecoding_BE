@@ -211,6 +211,11 @@ public class ArticleService {
             responseDto.setThumnail(thumnail);
             // 유저 프로필이미지
             String profileImage = "";
+            if(userRepository.findByNickname(articleList.get(i).getNickname()).getImgUrl() == null){
+                profileImage = null;
+            }else {
+                profileImage = userRepository.findByNickname(articleList.get(i).getNickname()).getImgUrl();
+            }
             responseDto.setProfileImage(profileImage);
             responseDto.setCommentCnt(articleList.get(i).getComments().size());
             responseDto.setLike(articleList.get(i).getLikes().size());
@@ -270,7 +275,11 @@ public class ArticleService {
             responseDto.setThumnail(thumnail);
             // 유저 프로필이미지
             String profileImage = "";
-
+            if(userRepository.findByNickname(articleList.get(i).getNickname()).getImgUrl() == null){
+                profileImage = null;
+            }else {
+                profileImage = userRepository.findByNickname(articleList.get(i).getNickname()).getImgUrl();
+            }
             responseDto.setProfileImage(profileImage);
             responseDto.setCommentCnt(articleList.get(i).getComments().size());
             responseDto.setLike(articleList.get(i).getLikes().size());
