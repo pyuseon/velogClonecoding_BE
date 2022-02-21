@@ -1,6 +1,6 @@
 package com.clonecoding.velogclone_be.service;
 
-import com.clonecoding.velogclone_be.dto.*;
+import com.clonecoding.velogclone_be.dto.article.*;
 import com.clonecoding.velogclone_be.model.Article;
 import com.clonecoding.velogclone_be.model.ArticleTag;
 import com.clonecoding.velogclone_be.model.Image;

@@ -1,10 +1,8 @@
 package com.clonecoding.velogclone_be.service;
 
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.SdkClientException;
+
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -80,16 +80,24 @@ public class S3Uploader {
 
     // https://bamdule.tistory.com/178
     // s3 파일 지우기
-    public void delete(String key) {
-        try {
-            //Delete 객체 생성
-            DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(this.bucket, key);
-            //Delete
-            this.amazonS3Client.deleteObject(deleteObjectRequest);
-            System.out.println(String.format("[%s] deletion complete", key));
+//    public void delete(String key) {
+//        try {
+//            //Delete 객체 생성
+//            DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(this.bucket, key);
+//            //Delete
+//            this.amazonS3Client.deleteObject(deleteObjectRequest);
+//            System.out.println(String.format("[%s] deletion complete", key));
+//
+//        } catch (AmazonServiceException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-        } catch (AmazonServiceException e) {
-            e.printStackTrace();
-        }
+
+    public void deleteS3(String source) throws UnsupportedEncodingException {
+//        source = source.replace("https://bookcafe-bucket.s3.ap-northeast-2.amazonaws.com/", "");
+        source = URLDecoder.decode(source.replace("https://bookcafe-bucket.s3.ap-northeast-2.amazonaws.com/", ""), "UTF-8");
+        System.out.println(source);
+        amazonS3Client.deleteObject(bucket, source);
     }
 }

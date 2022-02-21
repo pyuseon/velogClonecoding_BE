@@ -1,4 +1,4 @@
-package com.clonecoding.velogclone_be.dto;
+package com.clonecoding.velogclone_be.dto.article;
 
 import com.clonecoding.velogclone_be.model.Article;
 import lombok.Getter;
@@ -8,19 +8,15 @@ import java.util.List;
 
 @Setter
 @Getter
-public class ArticlesResponseDto {
+public class ArticleResponseDto {
     private Long postingId;
-    private String thumnail;
     private String title;
     private String content;
-    private String dayBefore;
-    private int commentCnt;
-    private String profileImage;
     private String nickname;
-    private List<String> tag;
-    private int like;
+    private List<String > imageFiles;
+    private List<String> tags;
 
-    public ArticlesResponseDto(Article article) {
+    public ArticleResponseDto(Article article){
         this.postingId = article.getId();
         this.title = article.getTitle();
         this.content = article.getContent();

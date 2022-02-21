@@ -1,4 +1,4 @@
-package com.clonecoding.velogclone_be.dto;
+package com.clonecoding.velogclone_be.dto.article;
 
 import com.clonecoding.velogclone_be.model.Image;
 import lombok.Getter;
