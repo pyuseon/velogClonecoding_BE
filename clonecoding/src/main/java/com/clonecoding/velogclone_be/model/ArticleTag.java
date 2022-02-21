@@ -15,13 +15,13 @@ public class ArticleTag {
     @Id
     private Long articleTagId;
 
-    @JsonManagedReference
-    @ManyToOne
+    @JsonBackReference
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ARTICLE_ID")
     private Article article;
 
-    @JsonManagedReference
-    @ManyToOne
+    @JsonBackReference
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "TAG_ID")
     private Tag tag;
 

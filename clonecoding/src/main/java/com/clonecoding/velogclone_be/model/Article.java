@@ -24,27 +24,27 @@ public class Article extends Timestamped{
     private String content;
 
     @Column
-    private String userName;
+    private String nickName;
 
     @Column
     private String imageFile;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "article", orphanRemoval = true)
+    @OneToMany(mappedBy = "article", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ArticleTag> tags;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "article", orphanRemoval = true)
+    @OneToMany(mappedBy = "article", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Comment> comments;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "article", orphanRemoval = true)
+    @OneToMany(mappedBy = "article", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Likes> likes;
 
     public Article(ArticleRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
-        this.userName = requestDto.getUserName();
+        this.nickName = requestDto.getNickName();
         this.imageFile = requestDto.getImageFile();
     }
 }
