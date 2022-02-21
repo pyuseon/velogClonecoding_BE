@@ -26,11 +26,10 @@ public class Article extends Timestamped{
     private String content;
 
     @Column
-    private String nickName;
+    private String nickname;
 
-
-    @Column
-    private String imageFile;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Image> imageFiles;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "article", orphanRemoval = true, cascade = CascadeType.ALL)
@@ -47,7 +46,6 @@ public class Article extends Timestamped{
     public Article(ArticleRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
-        this.nickName = requestDto.getNickName();
-        this.imageFile = requestDto.getImageFile();
+        this.nickname = requestDto.getNickname();
     }
 }

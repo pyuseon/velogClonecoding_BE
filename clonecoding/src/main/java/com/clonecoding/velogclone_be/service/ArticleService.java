@@ -3,10 +3,9 @@ package com.clonecoding.velogclone_be.service;
 import com.clonecoding.velogclone_be.dto.article.*;
 import com.clonecoding.velogclone_be.model.Article;
 import com.clonecoding.velogclone_be.model.ArticleTag;
+import com.clonecoding.velogclone_be.model.Image;
 import com.clonecoding.velogclone_be.model.Tag;
-import com.clonecoding.velogclone_be.repository.ArticleRepository;
-import com.clonecoding.velogclone_be.repository.ArticleTagRepository;
-import com.clonecoding.velogclone_be.repository.TagRepository;
+import com.clonecoding.velogclone_be.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +24,8 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final TagRepository tagRepository;
     private final ArticleTagRepository articleTagRepository;
+    private final UserRepository userRepository;
+    private final ImageRepository imageRepository;
 
     // 게시글 생성
     public ArticleResponseDto creatArticle(ArticleRequestDto requestDto) {
@@ -32,8 +33,23 @@ public class ArticleService {
 
         List<ArticleTag> tags = creatTags(requestDto, article);
         article.setTags(tags);
-
+        List<Image> images = new ArrayList<>();
+        if(requestDto.getImageFiles() == null){
+            images = null;
+        }else {
+            List<String> imageFiles = new ArrayList<>();
+            for (int i = 0; i < requestDto.getImageFiles().size(); i++) {
+                String imageFile = requestDto.getImageFiles().get(i);
+                Image image = new Image();
+                image.setImageFile(imageFile);
+                imageFiles.add(imageFile);
+                Image saveImage = imageRepository.save(image);
+                images.add(saveImage);
+            }
+        }
+        article.setImageFiles(images);
         Article saveArticle = articleRepository.save(article);
+
 
         //태그 다시 빼기
         List<String> responseTags = new ArrayList<>();
@@ -42,12 +58,18 @@ public class ArticleService {
             responseTags.add(tagName);
         }
 
-        ArticleResponseDto articleResponseDto = new ArticleResponseDto();
-        articleResponseDto.setPostingId(saveArticle.getId());
-        articleResponseDto.setTitle(saveArticle.getTitle());
-        articleResponseDto.setContent(saveArticle.getContent());
-        articleResponseDto.setNickName(saveArticle.getNickName());
-        articleResponseDto.setImageFile(saveArticle.getImageFile());
+        List<String> responseImages = new ArrayList<>();
+        if(saveArticle.getImageFiles() == null){
+            responseImages = null;
+        }else {
+            for (int i = 0; i < saveArticle.getImageFiles().size(); i++) {
+                String imageFile = saveArticle.getImageFiles().get(i).getImageFile();
+                responseImages.add(imageFile);
+            }
+        }
+
+        ArticleResponseDto articleResponseDto = new ArticleResponseDto(saveArticle);
+        articleResponseDto.setImageFiles(responseImages);
         articleResponseDto.setTags(responseTags);
 
         return articleResponseDto;
@@ -85,12 +107,14 @@ public class ArticleService {
             responseTags.add(tagName);
         }
 
-        ArticleResponseDto articleResponseDto = new ArticleResponseDto();
-        articleResponseDto.setPostingId(saveArticle.getId());
-        articleResponseDto.setTitle(saveArticle.getTitle());
-        articleResponseDto.setContent(saveArticle.getContent());
-        articleResponseDto.setNickName(saveArticle.getNickName());
-        articleResponseDto.setImageFile(saveArticle.getImageFile());
+        List<String> responseImages = new ArrayList<>();
+        for(int i = 0; i < saveArticle.getImageFiles().size(); i++){
+            String imageFile = saveArticle.getImageFiles().get(i).getImageFile();
+            responseImages.add(imageFile);
+        }
+
+        ArticleResponseDto articleResponseDto = new ArticleResponseDto(saveArticle);
+        articleResponseDto.setImageFiles(responseImages);
         articleResponseDto.setTags(responseTags);
 
         return articleResponseDto;
@@ -122,8 +146,34 @@ public class ArticleService {
             responseTags.add(tagName);
         }
 
+        List<String> responseImages = new ArrayList<>();
+        for(int i = 0; i < foundArticle.getImageFiles().size(); i++){
+            String imageFile = foundArticle.getImageFiles().get(i).getImageFile();
+            responseImages.add(imageFile);
+        }
+
+        String profileImage = "";
+        if(userRepository.findByNickname(foundArticle.getNickname()).getImgUrl().isEmpty()){
+            profileImage = null;
+        }else {
+            profileImage = userRepository.findByNickname(foundArticle.getNickname()).getImgUrl();
+        }
+
+        LocalDate currentDateTime = LocalDate.from(LocalDateTime.now());
+        LocalDate articleTime = LocalDate.from(foundArticle.getCreatedAt());
+        Period period = Period.between(currentDateTime, articleTime);
+        String dayBefore = "";
+        dayBefore += period.getDays();
+        dayBefore += "일 전";
+
+
         DetailArticleResponseDto detailArticleResponseDto = new DetailArticleResponseDto(foundArticle);
         detailArticleResponseDto.setTags(responseTags);
+        detailArticleResponseDto.setImageFiles(responseImages);
+        detailArticleResponseDto.setProfileImage(profileImage);
+        detailArticleResponseDto.setDayBefore(dayBefore);
+        detailArticleResponseDto.setCommentCnt(foundArticle.getComments().size());
+        detailArticleResponseDto.setLike(foundArticle.getLikes().size());
         detailArticleResponseDto.setModifiedAt(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(foundArticle.getModifiedAt()));
         return detailArticleResponseDto;
     }
@@ -134,7 +184,9 @@ public class ArticleService {
 
         List<ArticlesResponseDto> articlesResponseDtoList = new ArrayList<>();
         for(int i = 0; i < articleList.size(); i++) {
+            // 리스트안에 담아줄 객체 생성
             ArticlesResponseDto responseDto = new ArticlesResponseDto(articleList.get(i));
+            // 생성일자 몇일전인지 비교
             LocalDate currentDateTime = LocalDate.from(LocalDateTime.now());
             LocalDate articleTime = LocalDate.from(articleList.get(i).getCreatedAt());
             Period period = Period.between(currentDateTime, articleTime);
@@ -142,17 +194,33 @@ public class ArticleService {
             dayBefore += period.getDays();
             dayBefore += "일 전";
             responseDto.setDayBefore(dayBefore);
+            // 태그 빼서 리스트에 넣기
             List<String> responseTags = new ArrayList<>();
             for(int j = 0; j < articleList.get(i).getTags().size(); j++){
                 String tagName = articleList.get(i).getTags().get(j).getTag().getTagName();
                 responseTags.add(tagName);
             }
             responseDto.setTag(responseTags);
+            // 썸네일 이미지 빼기
+            String thumnail = "";
+            if(articleList.get(i).getImageFiles().size() == 0){
+                thumnail = null;
+            }else {
+                thumnail = articleList.get(i).getImageFiles().get(0).getImageFile();
+            }
+            responseDto.setThumnail(thumnail);
+            // 유저 프로필이미지
+            String profileImage = "";
+            if(userRepository.findByNickname(articleList.get(i).getNickname()).getImgUrl() == null){
+                profileImage = null;
+            }else {
+                profileImage = userRepository.findByNickname(articleList.get(i).getNickname()).getImgUrl();
+            }
+            responseDto.setProfileImage(profileImage);
             responseDto.setCommentCnt(articleList.get(i).getComments().size());
             responseDto.setLike(articleList.get(i).getLikes().size());
             articlesResponseDtoList.add(responseDto);
         }
-
 
         AllArticleResponseDto articles = new AllArticleResponseDto();
         articles.setArticles(articlesResponseDtoList);
@@ -180,7 +248,9 @@ public class ArticleService {
 
         List<ArticlesResponseDto> articlesResponseDtoList = new ArrayList<>();
         for(int i = 0; i < articleList.size(); i++) {
+            // 리스트안에 담아줄 객체 생성
             ArticlesResponseDto responseDto = new ArticlesResponseDto(articleList.get(i));
+            // 생성일자 몇일전인지 비교
             LocalDate nowTime = LocalDate.from(LocalDateTime.now());
             LocalDate articleTime = LocalDate.from(articleList.get(i).getCreatedAt());
             Period period = Period.between(nowTime, articleTime);
@@ -188,12 +258,29 @@ public class ArticleService {
             dayBefore += period.getDays();
             dayBefore += "일 전";
             responseDto.setDayBefore(dayBefore);
+            // 태그 빼서 리스트에 넣기
             List<String> responseTags = new ArrayList<>();
             for(int j = 0; j < articleList.get(i).getTags().size(); j++){
                 String tagName = articleList.get(i).getTags().get(j).getTag().getTagName();
                 responseTags.add(tagName);
             }
             responseDto.setTag(responseTags);
+            // 썸네일 이미지 빼기
+            String thumnail = "";
+            if(articleList.get(i).getImageFiles().size() == 0){
+                thumnail = null;
+            }else {
+                thumnail = articleList.get(i).getImageFiles().get(0).getImageFile();
+            }
+            responseDto.setThumnail(thumnail);
+            // 유저 프로필이미지
+            String profileImage = "";
+            if(userRepository.findByNickname(articleList.get(i).getNickname()).getImgUrl() == null){
+                profileImage = null;
+            }else {
+                profileImage = userRepository.findByNickname(articleList.get(i).getNickname()).getImgUrl();
+            }
+            responseDto.setProfileImage(profileImage);
             responseDto.setCommentCnt(articleList.get(i).getComments().size());
             responseDto.setLike(articleList.get(i).getLikes().size());
             articlesResponseDtoList.add(responseDto);

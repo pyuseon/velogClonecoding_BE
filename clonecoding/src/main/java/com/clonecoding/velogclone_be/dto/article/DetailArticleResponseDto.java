@@ -2,6 +2,7 @@ package com.clonecoding.velogclone_be.dto.article;
 
 import com.clonecoding.velogclone_be.model.Article;
 import com.clonecoding.velogclone_be.model.Comment;
+import com.clonecoding.velogclone_be.model.Image;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,17 +14,21 @@ public class DetailArticleResponseDto {
     private Long postingId;
     private String title;
     private String content;
-    private String nickName;
-//    private String imageFile;
+    private String nickname;
+    private List<String> imageFiles;
+    private String profileImage;
     private List<String> tags;
     private List<Comment> comments;
     private String modifiedAt;
+    private String dayBefore;
+    private int commentCnt;
+    private int like;
 
     public DetailArticleResponseDto(Article article) {
         this.postingId = article.getId();
         this.title = article.getTitle();
         this.content = article.getContent();
-        this.nickName = article.getNickName();
+        this.nickname = article.getNickname();
         this.comments = article.getComments();
     }
 }

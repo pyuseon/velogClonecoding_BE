@@ -10,21 +10,20 @@ import java.util.List;
 @Getter
 public class ArticlesResponseDto {
     private Long postingId;
-    private String imageFile;
+    private String thumnail;
     private String title;
     private String content;
     private String dayBefore;
     private int commentCnt;
-//    private String userImage;
-    private String nickName;
+    private String profileImage;
+    private String nickname;
     private List<String> tag;
     private int like;
 
     public ArticlesResponseDto(Article article) {
         this.postingId = article.getId();
-        this.imageFile = article.getImageFile();
         this.title = article.getTitle();
         this.content = article.getContent();
-        this.nickName = article.getNickName();
+        this.nickname = article.getNickname();
     }
 }
