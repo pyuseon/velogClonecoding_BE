@@ -33,16 +33,19 @@ public class ArticleService {
 
         List<ArticleTag> tags = creatTags(requestDto, article);
         article.setTags(tags);
-
         List<Image> images = new ArrayList<>();
-        List<String> imageFiles = new ArrayList<>();
-        for(int i = 0; i < requestDto.getImageFiles().size(); i++){
-            String imageFile = requestDto.getImageFiles().get(i);
-            Image image = new Image();
-            image.setImageFile(imageFile);
-            imageFiles.add(imageFile);
-            Image saveImage = imageRepository.save(image);
-            images.add(saveImage);
+        if(requestDto.getImageFiles() == null){
+            images = null;
+        }else {
+            List<String> imageFiles = new ArrayList<>();
+            for (int i = 0; i < requestDto.getImageFiles().size(); i++) {
+                String imageFile = requestDto.getImageFiles().get(i);
+                Image image = new Image();
+                image.setImageFile(imageFile);
+                imageFiles.add(imageFile);
+                Image saveImage = imageRepository.save(image);
+                images.add(saveImage);
+            }
         }
         article.setImageFiles(images);
         Article saveArticle = articleRepository.save(article);
@@ -56,11 +59,14 @@ public class ArticleService {
         }
 
         List<String> responseImages = new ArrayList<>();
-        for(int i = 0; i < saveArticle.getImageFiles().size(); i++){
-            String imageFile = saveArticle.getImageFiles().get(i).getImageFile();
-            responseImages.add(imageFile);
+        if(saveArticle.getImageFiles() == null){
+            responseImages = null;
+        }else {
+            for (int i = 0; i < saveArticle.getImageFiles().size(); i++) {
+                String imageFile = saveArticle.getImageFiles().get(i).getImageFile();
+                responseImages.add(imageFile);
+            }
         }
-
 
         ArticleResponseDto articleResponseDto = new ArticleResponseDto(saveArticle);
         articleResponseDto.setImageFiles(responseImages);
@@ -146,8 +152,12 @@ public class ArticleService {
             responseImages.add(imageFile);
         }
 
-//        String profileImage = userRepository.findByNickname(foundArticle.getNickname()).getImgUrl();
         String profileImage = "";
+        if(userRepository.findByNickname(foundArticle.getNickname()).getImgUrl().isEmpty()){
+            profileImage = null;
+        }else {
+            profileImage = userRepository.findByNickname(foundArticle.getNickname()).getImgUrl();
+        }
 
         LocalDate currentDateTime = LocalDate.from(LocalDateTime.now());
         LocalDate articleTime = LocalDate.from(foundArticle.getCreatedAt());
@@ -193,17 +203,13 @@ public class ArticleService {
             responseDto.setTag(responseTags);
             // 썸네일 이미지 빼기
             String thumnail = "";
-            if(articleList.get(i).getImageFiles().get(0).getImageFile() == null){
+            if(articleList.get(i).getImageFiles().size() == 0){
                 thumnail = null;
             }else {
                 thumnail = articleList.get(i).getImageFiles().get(0).getImageFile();
             }
-            System.out.println("=====썸네일 이미지=====");
-            System.out.println(thumnail);
-
             responseDto.setThumnail(thumnail);
             // 유저 프로필이미지
-//            String profileImage = userRepository.findByNickname(articleList.get(i).getNickname()).getImgUrl();
             String profileImage = "";
             responseDto.setProfileImage(profileImage);
             responseDto.setCommentCnt(articleList.get(i).getComments().size());
@@ -255,11 +261,16 @@ public class ArticleService {
             }
             responseDto.setTag(responseTags);
             // 썸네일 이미지 빼기
-            String thumnail = articleList.get(i).getImageFiles().get(0).getImageFile();
+            String thumnail = "";
+            if(articleList.get(i).getImageFiles().size() == 0){
+                thumnail = null;
+            }else {
+                thumnail = articleList.get(i).getImageFiles().get(0).getImageFile();
+            }
             responseDto.setThumnail(thumnail);
             // 유저 프로필이미지
-//            String profileImage = userRepository.findByNickname(articleList.get(i).getNickname()).getImgUrl();
             String profileImage = "";
+
             responseDto.setProfileImage(profileImage);
             responseDto.setCommentCnt(articleList.get(i).getComments().size());
             responseDto.setLike(articleList.get(i).getLikes().size());
