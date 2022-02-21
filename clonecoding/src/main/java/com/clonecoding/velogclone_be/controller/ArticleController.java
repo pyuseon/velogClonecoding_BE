@@ -60,7 +60,6 @@ public class ArticleController {
     // 게시글 이미지 업로드
     @PostMapping("/api/posting/image")
     public String uploadImages( @RequestParam(value = "image", required = false) MultipartFile multipartFile) throws IOException {
-
         String imgUrl = null;
         if(!multipartFile.isEmpty()){
             imgUrl = s3Uploader.upload(multipartFile, "static");
