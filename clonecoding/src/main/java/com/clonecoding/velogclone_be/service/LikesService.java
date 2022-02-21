@@ -11,6 +11,8 @@ import com.clonecoding.velogclone_be.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class LikesService {
@@ -40,12 +42,10 @@ public class LikesService {
         Long deleteUserId = user.getId();
         Long deleteAriticleId = article.getId();
 
-        Likes likes = likesRepository.findOneByUserIdAndArticleId(deleteUserId, deleteAriticleId).orElseThrow(
-                () -> new IllegalArgumentException("포스팅 정보 혹은 유저 정보를 다시 확인해주세요.")
-        );
+        List<Likes> likesList= likesRepository.findAllByUserIdAndArticleId(deleteUserId, deleteAriticleId);
 
-        Long deleteLikesId = likes.getLikeId();
-        likesRepository.deleteById(likes.getLikeId());
+        Long deleteLikesId = likesList.get(0).getLikeId();
+        likesRepository.deleteById(deleteLikesId);
 
         return  "{\"response\":\"true\"}";
     }
