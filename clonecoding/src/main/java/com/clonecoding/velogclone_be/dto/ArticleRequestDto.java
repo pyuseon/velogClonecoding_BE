@@ -1,6 +1,5 @@
 package com.clonecoding.velogclone_be.dto;
 
-import com.clonecoding.velogclone_be.model.Tag;
 import lombok.Getter;
 import lombok.Setter;
 

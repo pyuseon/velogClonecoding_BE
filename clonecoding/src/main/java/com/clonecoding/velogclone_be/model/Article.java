@@ -4,11 +4,13 @@ import com.clonecoding.velogclone_be.dto.ArticleRequestDto;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
 @NoArgsConstructor
+@Setter
 @Getter
 @Entity
 public class Article extends Timestamped{
