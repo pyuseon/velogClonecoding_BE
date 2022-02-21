@@ -16,7 +16,7 @@ public class Comment extends Timestamped{
     private Long commentId;
 
     @Column(nullable = false)
-    private String userName;
+    private String nickname;
 
     @Column(nullable = false)
     private String comment;
@@ -25,5 +25,15 @@ public class Comment extends Timestamped{
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "ARTICLE_ID")
     private Article article;
+
+    public Comment(String nickname, String comment, Article article){
+        this.nickname = nickname;
+        this.comment = comment;
+        this.article = article;
+    }
+
+    public void updateComment(String comment){
+        this.comment = comment;
+    }
 
 }

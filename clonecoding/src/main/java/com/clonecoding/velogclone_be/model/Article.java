@@ -28,6 +28,7 @@ public class Article extends Timestamped{
     @Column
     private String nickName;
 
+
     @Column
     private String imageFile;
 

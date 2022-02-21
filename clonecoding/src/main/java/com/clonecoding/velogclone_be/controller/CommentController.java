@@ -1,19 +1,39 @@
 package com.clonecoding.velogclone_be.controller;
 
 import com.clonecoding.velogclone_be.dto.CommentRequestDto;
-import com.clonecoding.velogclone_be.repository.ArticleRepository;
 import com.clonecoding.velogclone_be.repository.CommentRepository;
 import com.clonecoding.velogclone_be.service.CommentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequiredArgsConstructor
 public class CommentController {
+
     private final CommentService commentService;
     private final CommentRepository commentRepository;
-    private final ArticleRepository articleRepository;
+
+
+    //댓글 작성
+    @PostMapping("/api/comment")
+    public String creatComment(@RequestBody CommentRequestDto commentRequestDto){
+        commentService.creatComment(commentRequestDto);
+        return "댓글 작성이 완료되었습니다.";
+    }
+    //댓글 수정
+    @PutMapping("/api/comment/{commentId}")
+    public String updateComment(@PathVariable Long commentId, @RequestBody CommentRequestDto commentRequestDto){
+        commentService.updataComment(commentId, commentRequestDto);
+        return "댓글 수정이 완료되었습니다.";
+    }
+    //댓글 삭제
+    @DeleteMapping("/api/comment/{commentId}")
+    public String deleteComment(@PathVariable Long commentId){
+        commentRepository.deleteById(commentId);
+        return "댓글 삭제가 완료되었습니다.";
+    }
+
+
 
 }
