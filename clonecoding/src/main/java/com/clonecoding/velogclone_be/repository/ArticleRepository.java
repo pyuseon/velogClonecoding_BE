@@ -10,4 +10,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     List<Article> findAllByOrderByCreatedAtDesc();
     List<Article> findAllByCreatedAtBetweenOrderByLikesDesc(LocalDateTime past, LocalDateTime now);
     List<Article> findAllByNickname(String nickname);
+    List<Article> findByCreatedAtBetweenOrderByLikesDesc(LocalDateTime past, LocalDateTime now);
+    List<Article> findByCreatedAtBetween(LocalDateTime past, LocalDateTime now);
 }

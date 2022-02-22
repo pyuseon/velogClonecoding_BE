@@ -22,19 +22,19 @@ public class CommentController {
         return commentService.creatComment(commentRequestDto);
 
     }
+
     //댓글 수정
     @PutMapping("/api/comment/{commentId}")
     public String updateComment(@PathVariable Long commentId, @RequestBody CommentRequestDto commentRequestDto){
         commentService.updataComment(commentId, commentRequestDto);
         return "댓글 수정이 완료되었습니다.";
     }
+
     //댓글 삭제
     @DeleteMapping("/api/comment/{commentId}")
     public String deleteComment(@PathVariable Long commentId){
         commentRepository.deleteById(commentId);
         return "댓글 삭제가 완료되었습니다.";
     }
-
-
 
 }
