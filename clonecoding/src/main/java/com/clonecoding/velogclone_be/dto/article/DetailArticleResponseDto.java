@@ -21,7 +21,7 @@ public class DetailArticleResponseDto {
     private List<String> imageFiles;
     private String profileImage;
     private List<String> tags;
-    private List<CommentResponseDto> comments;
+    private List<CommentResponseDto> commentList;
     private String modifiedAt;
     private String dayBefore;
     private int commentCnt;
