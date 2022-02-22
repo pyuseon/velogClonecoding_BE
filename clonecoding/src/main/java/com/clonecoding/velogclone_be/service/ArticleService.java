@@ -191,6 +191,12 @@ public class ArticleService {
             responseImages.add(imageFile);
         }
 
+        // 썸네일
+        String thumnail = null;
+        if(foundArticle.getImageFiles().size() != 0){
+            thumnail = foundArticle.getImageFiles().get(0).getImageFile();
+        }
+
         // 프로필 이미지 검사
         String profileImage = null;
         User findUser = userRepository.findByNickname(foundArticle.getNickname());
@@ -238,6 +244,7 @@ public class ArticleService {
         DetailArticleResponseDto detailArticleResponseDto = new DetailArticleResponseDto(foundArticle);
         detailArticleResponseDto.setTags(responseTags);
         detailArticleResponseDto.setImageFiles(responseImages);
+        detailArticleResponseDto.setThumnail(thumnail);
         detailArticleResponseDto.setProfileImage(profileImage);
         detailArticleResponseDto.setComments(commentList);
         detailArticleResponseDto.setDayBefore(dayBefore);
