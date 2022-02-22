@@ -237,7 +237,7 @@ public class ArticleService {
                 commentProfile = findUser2.getImgUrl();
             }
             responseDto.setProfileImage(commentProfile);
-            responseDto.setCreatedAtComment(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(foundArticle.getCreatedAt()));
+            responseDto.setCreatedAtComment(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(foundArticle.getComments().get(i).getCreatedAt()));
             commentList.add(responseDto);
         }
 
