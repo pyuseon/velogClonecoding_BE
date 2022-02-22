@@ -1,5 +1,6 @@
 package com.clonecoding.velogclone_be.service;
 
+import com.clonecoding.velogclone_be.dto.CommentResponseDto;
 import com.clonecoding.velogclone_be.dto.article.*;
 import com.clonecoding.velogclone_be.model.*;
 import com.clonecoding.velogclone_be.repository.*;
@@ -7,6 +8,7 @@ import com.clonecoding.velogclone_be.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -29,13 +31,16 @@ public class ArticleService {
 
     // 게시글 생성
     public ArticleResponseDto creatArticle(ArticleRequestDto requestDto, UserDetailsImpl userDetails) {
+        // 로그인 사용자와 게시글 닉네임 비교
         if(!requestDto.getNickname().equals(userDetails.getNickname())){
             throw new IllegalArgumentException("로그인한 사용자의 닉네임과 게시글의 작성자의 닉네임이 맞지 않습니다.");
         }
-
+        // 저장할 article 생성
         Article article = new Article(requestDto);
 
+        // 태그 확인
         List<ArticleTag> tags = new ArrayList<>();
+        // 태그가 없다면 null 있다면 태그저장
         if(requestDto.getTag() == null){
             tags = null;
         }else {
@@ -43,7 +48,9 @@ public class ArticleService {
         }
         article.setTags(tags);
 
+        // 이미지 확인
         List<Image> images = new ArrayList<>();
+        // 이미지가 없다면 null 있다면 이미지 저장
         if(requestDto.getImageFiles() == null){
             images = null;
         }else {
@@ -58,16 +65,17 @@ public class ArticleService {
             }
         }
         article.setImageFiles(images);
+        // 게시글 저장
         Article saveArticle = articleRepository.save(article);
 
 
-        //태그 다시 빼기
+        // 태그 다시 빼기
         List<String> responseTags = new ArrayList<>();
         for(int i = 0; i < saveArticle.getTags().size(); i++){
             String tagName = saveArticle.getTags().get(i).getTag().getTagName();
             responseTags.add(tagName);
         }
-
+        // 이미지 다시 빼기
         List<String> responseImages = new ArrayList<>();
         if(saveArticle.getImageFiles() == null){
             responseImages = null;
@@ -77,7 +85,7 @@ public class ArticleService {
                 responseImages.add(imageFile);
             }
         }
-
+        // responseDto로 생성해서 반환해주기
         ArticleResponseDto articleResponseDto = new ArticleResponseDto(saveArticle);
         articleResponseDto.setImageFiles(responseImages);
         articleResponseDto.setTags(responseTags);
@@ -103,25 +111,31 @@ public class ArticleService {
 
     // 게시글 수정
     public ArticleResponseDto editArticle(Long postingId, ArticleRequestDto requestDto, UserDetailsImpl userDetails) {
+        // 게시글 찾기
         Article foundArticle = articleRepository.findById(postingId).orElseThrow(
                 () -> new NullPointerException("해당 게시글을 찾을 수 없습니다.")
         );
 
+        // 로그인한 사용자과 게시글 작성자 확인
         if(!foundArticle.getNickname().equals(userDetails.getNickname())){
             throw new IllegalArgumentException("게시글의 작성자만 수정 할 수 있습니다.");
         }
 
+        // 수정된 제목과 내용 넣어주기
         foundArticle.setTitle(requestDto.getTitle());
         foundArticle.setContent(requestDto.getContent());
 
+        // 수정된 게시글 저장
         Article saveArticle = articleRepository.save(foundArticle);
 
+        // 태그 다시 빼기
         List<String> responseTags = new ArrayList<>();
         for(int i = 0; i < saveArticle.getTags().size(); i++){
             String tagName = saveArticle.getTags().get(i).getTag().getTagName();
             responseTags.add(tagName);
         }
 
+        // 이미지 다시 빼기
         List<String> responseImages = new ArrayList<>();
         for(int i = 0; i < saveArticle.getImageFiles().size(); i++){
             String imageFile = saveArticle.getImageFiles().get(i).getImageFile();
@@ -137,15 +151,17 @@ public class ArticleService {
 
     // 게시글 삭제
     public HashMap<String, Long> deleteArticle(Long postingId, UserDetailsImpl userDetails) {
+        // 해당 게시글 찾기
         Article foundArticle = articleRepository.findById(postingId).orElseThrow(
                 () -> new NullPointerException("해당 게시글을 찾을 수 없습니다.")
         );
 
+        // 로그인 사용자과 게시글 작성자 확인
         if(!foundArticle.getNickname().equals(userDetails.getNickname())){
             throw new IllegalArgumentException("게시글의 작성자만 삭제 할 수 있습니다.");
         }
 
-
+        // 반환해줄 id값 만들기
         HashMap<String, Long> responseId = new HashMap<>();
         responseId.put("postingId", foundArticle.getId());
 
@@ -156,42 +172,74 @@ public class ArticleService {
 
     // 게시글 상세조회
     public DetailArticleResponseDto getArticle(Long postingId) {
+        // 게시글 찾기
         Article foundArticle = articleRepository.findById(postingId).orElseThrow(
                 () -> new NullPointerException("해당 게시글을 찾을 수 없습니다.")
         );
 
+        // 태그 다시 빼기
         List<String> responseTags = new ArrayList<>();
         for (int i = 0; i < foundArticle.getTags().size(); i++) {
             String tagName = foundArticle.getTags().get(i).getTag().getTagName();
             responseTags.add(tagName);
         }
 
+        // 이미지 다시 빼기
         List<String> responseImages = new ArrayList<>();
         for(int i = 0; i < foundArticle.getImageFiles().size(); i++){
             String imageFile = foundArticle.getImageFiles().get(i).getImageFile();
             responseImages.add(imageFile);
         }
 
-        String profileImage = "";
-        if(userRepository.findByNickname(foundArticle.getNickname()).getImgUrl().isEmpty()){
-            profileImage = null;
-        }else {
-            profileImage = userRepository.findByNickname(foundArticle.getNickname()).getImgUrl();
+        // 프로필 이미지 검사
+        String profileImage = null;
+        User findUser = userRepository.findByNickname(foundArticle.getNickname());
+        if(findUser.getImgUrl() != null){
+            profileImage = findUser.getImgUrl();
         }
 
+        // 현재 시간과 생성날짜 비교
         LocalDate currentDateTime = LocalDate.from(LocalDateTime.now());
         LocalDate articleTime = LocalDate.from(foundArticle.getCreatedAt());
         Period period = Period.between(currentDateTime, articleTime);
         String dayBefore = "";
         int days = (period.getDays())*-1;
-        dayBefore += days;
-        dayBefore += "일 전";
+        if(days < 1){
+            LocalDateTime nowTime = LocalDateTime.now();
+            LocalDateTime createdTime = foundArticle.getCreatedAt();
+            Duration duration = Duration.between(nowTime, createdTime);
+            int time = (int) duration.getSeconds();
+            dayBefore += (time/3600)*-1;
+            dayBefore += "시간 전";
+        }else {
+            dayBefore += days;
+            dayBefore += "일 전";
+        }
+
+
+        // 코멘트빼오기
+        List<CommentResponseDto> commentList = new ArrayList<>();
+        for(int i = 0; i < foundArticle.getComments().size(); i++){
+            CommentResponseDto responseDto = new CommentResponseDto();
+            responseDto.setPostingId(foundArticle.getId());
+            responseDto.setCommentId(foundArticle.getComments().get(i).getCommentId());
+            responseDto.setComment(foundArticle.getComments().get(i).getComment());
+            responseDto.setNickname(foundArticle.getComments().get(i).getNickname());
+            String commentProfile = null;
+            User findUser2 = userRepository.findByNickname(foundArticle.getComments().get(i).getNickname());
+            if(findUser2.getImgUrl() != null){
+                commentProfile = findUser2.getImgUrl();
+            }
+            responseDto.setProfileImage(commentProfile);
+            responseDto.setCreatedAtComment(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(foundArticle.getCreatedAt()));
+        }
 
 
         DetailArticleResponseDto detailArticleResponseDto = new DetailArticleResponseDto(foundArticle);
         detailArticleResponseDto.setTags(responseTags);
         detailArticleResponseDto.setImageFiles(responseImages);
         detailArticleResponseDto.setProfileImage(profileImage);
+        detailArticleResponseDto.setComments(commentList);
         detailArticleResponseDto.setDayBefore(dayBefore);
         detailArticleResponseDto.setCommentCnt(foundArticle.getComments().size());
         detailArticleResponseDto.setLike(foundArticle.getLikes().size());
@@ -213,8 +261,17 @@ public class ArticleService {
             Period period = Period.between(currentDateTime, articleTime);
             String dayBefore = "";
             int days = (period.getDays())*-1;
-            dayBefore += days;
-            dayBefore += "일 전";
+            if(days < 1){
+                LocalDateTime nowTime = LocalDateTime.now();
+                LocalDateTime createdTime = articleList.get(i).getCreatedAt();
+                Duration duration = Duration.between(nowTime, createdTime);
+                int time = (int) duration.getSeconds();
+                dayBefore += (time/3600)*-1;
+                dayBefore += "시간 전";
+            }else {
+                dayBefore += days;
+                dayBefore += "일 전";
+            }
             responseDto.setDayBefore(dayBefore);
             // 태그 빼서 리스트에 넣기
             List<String> responseTags = new ArrayList<>();
@@ -277,8 +334,17 @@ public class ArticleService {
             Period period = Period.between(nowTime, articleTime);
             String dayBefore = "";
             int days = (period.getDays())*-1;
-            dayBefore += days;
-            dayBefore += "일 전";
+            if(days < 1){
+                LocalDateTime nowTime2 = LocalDateTime.now();
+                LocalDateTime createdTime = articleList.get(i).getCreatedAt();
+                Duration duration = Duration.between(nowTime2, createdTime);
+                int time = (int) duration.getSeconds();
+                dayBefore += (time/3600)*-1;
+                dayBefore += "시간 전";
+            }else {
+                dayBefore += days;
+                dayBefore += "일 전";
+            }
             responseDto.setDayBefore(dayBefore);
             // 태그 빼서 리스트에 넣기
             List<String> responseTags = new ArrayList<>();
