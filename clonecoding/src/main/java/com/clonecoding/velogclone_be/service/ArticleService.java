@@ -245,6 +245,7 @@ public class ArticleService {
         detailArticleResponseDto.setTags(responseTags);
         detailArticleResponseDto.setImageFiles(responseImages);
         detailArticleResponseDto.setThumnail(thumnail);
+        detailArticleResponseDto.setUsername(findUser.getUsername());
         detailArticleResponseDto.setProfileImage(profileImage);
         detailArticleResponseDto.setComments(commentList);
         detailArticleResponseDto.setDayBefore(dayBefore);

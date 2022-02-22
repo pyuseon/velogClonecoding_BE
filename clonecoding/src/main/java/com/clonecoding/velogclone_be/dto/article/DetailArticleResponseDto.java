@@ -17,6 +17,7 @@ public class DetailArticleResponseDto {
     private String content;
     private String thumnail;
     private String nickname;
+    private String username;
     private List<String> imageFiles;
     private String profileImage;
     private List<String> tags;
