@@ -1,17 +1,16 @@
 package com.clonecoding.velogclone_be.controller;
 
-import com.clonecoding.velogclone_be.dto.article.AllArticleResponseDto;
-import com.clonecoding.velogclone_be.dto.article.ArticleRequestDto;
-import com.clonecoding.velogclone_be.dto.article.ArticleResponseDto;
-import com.clonecoding.velogclone_be.dto.article.DetailArticleResponseDto;
+import com.clonecoding.velogclone_be.dto.article.*;
 import com.clonecoding.velogclone_be.service.ArticleService;
 import com.clonecoding.velogclone_be.service.S3Uploader;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -56,7 +55,6 @@ public class ArticleController {
         return articleService.trendArticles(options);
     }
 
-
     // 게시글 이미지 업로드
     @PostMapping("/api/posting/image")
     public String uploadImages( @RequestParam(value = "image", required = false) MultipartFile multipartFile) throws IOException {
@@ -68,4 +66,10 @@ public class ArticleController {
         return imgUrl;
     }
 
+//    // 내가 작성한 게시글 목록 조회
+//    @GetMapping("/api/mypage/{nickname}")
+//    public ResponseEntity<List<MyArticlesResponseDto>> getMyArticles(@PathVariable String nickname){
+//        List<MyArticlesResponseDto> myArticlesResponseDtoList = articleService.getMyArticles(nickname);
+//        return ResponseEntity.ok(myArticlesResponseDtoList);
+//    }
 }

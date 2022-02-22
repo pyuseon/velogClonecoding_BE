@@ -1,13 +1,11 @@
 package com.clonecoding.velogclone_be.service;
 
 import com.clonecoding.velogclone_be.dto.article.*;
-import com.clonecoding.velogclone_be.model.Article;
-import com.clonecoding.velogclone_be.model.ArticleTag;
-import com.clonecoding.velogclone_be.model.Image;
-import com.clonecoding.velogclone_be.model.Tag;
+import com.clonecoding.velogclone_be.model.*;
 import com.clonecoding.velogclone_be.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -291,4 +289,41 @@ public class ArticleService {
 
         return articles;
     }
+
+//    // 내가 작성한 게시글 목록 조회
+//    @Transactional
+//    public List<MyArticlesResponseDto> getMyArticles(String nickname) {
+//
+//        List<MyArticlesResponseDto> responseDtoList = new ArrayList<>();
+//
+//        //nickname 가진 유저
+//        User user = userRepository.findByNickname(nickname).orElseThrow(
+//                () -> new IllegalArgumentException("탈퇴한 회원입니다.")
+//        );
+//        List<Article> articleList = articleRepository.findAllByNickname(nickname);
+//
+//        for(Article eachArticle : articleList){
+//            Long postingId = eachArticle.getId();
+//            String title = eachArticle.getTitle();
+//            String content = eachArticle.getContent();
+//
+//            String thumnail = "";
+//            if(eachArticle.getImageFiles().size() == 0){
+//                thumnail = null;
+//            }else {
+//                thumnail = eachArticle.getImageFiles().get(0).getImageFile();
+//            }
+//
+//            LocalDate currentDateTime = LocalDate.from(LocalDateTime.now());
+//            LocalDate articleTime = LocalDate.from(articleList.get(i).getCreatedAt());
+//            Period period = Period.between(currentDateTime, articleTime);
+//            String dayBefore = "";
+//            dayBefore += period.getDays();
+//            dayBefore += "일 전";
+//
+//
+//
+//        }
+//
+//    }
 }
