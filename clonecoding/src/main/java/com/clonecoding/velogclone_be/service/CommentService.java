@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.format.DateTimeFormatter;
+
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +31,7 @@ public class CommentService {
 
         CommentResponseDto commentResponseDto = new CommentResponseDto();
         commentResponseDto.setCommentId(comment.getCommentId());
-        commentResponseDto.setDate(String.valueOf(comment.getCreatedAt()));
+        commentResponseDto.setCreatedAtComment(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(comment.getCreatedAt()));
         commentResponseDto.setMsg("댓글 작성이 완료되었습니다.");
 
         return commentResponseDto;
