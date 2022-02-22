@@ -238,6 +238,7 @@ public class ArticleService {
             }
             responseDto.setProfileImage(commentProfile);
             responseDto.setCreatedAtComment(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(foundArticle.getCreatedAt()));
+            commentList.add(responseDto);
         }
 
 
