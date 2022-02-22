@@ -15,6 +15,7 @@ public class DetailArticleResponseDto {
     private Long postingId;
     private String title;
     private String content;
+    private String thumnail;
     private String nickname;
     private List<String> imageFiles;
     private String profileImage;
