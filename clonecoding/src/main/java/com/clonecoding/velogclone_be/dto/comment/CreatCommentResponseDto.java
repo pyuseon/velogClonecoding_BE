@@ -1,4 +1,4 @@
-package com.clonecoding.velogclone_be.dto;
+package com.clonecoding.velogclone_be.dto.comment;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -7,12 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class CommentResponseDto {
+public class CreatCommentResponseDto {
     private String msg;
-    private Long postingId;
     private Long commentId;
-    private String nickname;
-    private String profileImage;
-    private String comment;
     private String createdAtComment;
 }
