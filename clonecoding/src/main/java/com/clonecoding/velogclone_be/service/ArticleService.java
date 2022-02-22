@@ -1,11 +1,9 @@
 package com.clonecoding.velogclone_be.service;
 
 import com.clonecoding.velogclone_be.dto.article.*;
-import com.clonecoding.velogclone_be.model.Article;
-import com.clonecoding.velogclone_be.model.ArticleTag;
-import com.clonecoding.velogclone_be.model.Image;
-import com.clonecoding.velogclone_be.model.Tag;
+import com.clonecoding.velogclone_be.model.*;
 import com.clonecoding.velogclone_be.repository.*;
+import com.clonecoding.velogclone_be.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +12,10 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -28,11 +28,21 @@ public class ArticleService {
     private final ImageRepository imageRepository;
 
     // 게시글 생성
-    public ArticleResponseDto creatArticle(ArticleRequestDto requestDto) {
+    public ArticleResponseDto creatArticle(ArticleRequestDto requestDto, UserDetailsImpl userDetails) {
+        if(!requestDto.getNickname().equals(userDetails.getNickname())){
+            throw new IllegalArgumentException("로그인한 사용자의 닉네임과 게시글의 작성자의 닉네임이 맞지 않습니다.");
+        }
+
         Article article = new Article(requestDto);
 
-        List<ArticleTag> tags = creatTags(requestDto, article);
+        List<ArticleTag> tags = new ArrayList<>();
+        if(requestDto.getTag() == null){
+            tags = null;
+        }else {
+            tags = creatTags(requestDto, article);
+        }
         article.setTags(tags);
+
         List<Image> images = new ArrayList<>();
         if(requestDto.getImageFiles() == null){
             images = null;
@@ -92,10 +102,15 @@ public class ArticleService {
     }
 
     // 게시글 수정
-    public ArticleResponseDto editArticle(Long postingId, ArticleRequestDto requestDto) {
+    public ArticleResponseDto editArticle(Long postingId, ArticleRequestDto requestDto, UserDetailsImpl userDetails) {
         Article foundArticle = articleRepository.findById(postingId).orElseThrow(
                 () -> new NullPointerException("해당 게시글을 찾을 수 없습니다.")
         );
+
+        if(!foundArticle.getNickname().equals(userDetails.getNickname())){
+            throw new IllegalArgumentException("게시글의 작성자만 수정 할 수 있습니다.");
+        }
+
         foundArticle.setTitle(requestDto.getTitle());
         foundArticle.setContent(requestDto.getContent());
 
@@ -121,10 +136,15 @@ public class ArticleService {
     }
 
     // 게시글 삭제
-    public HashMap<String, Long> deleteArticle(Long postingId) {
+    public HashMap<String, Long> deleteArticle(Long postingId, UserDetailsImpl userDetails) {
         Article foundArticle = articleRepository.findById(postingId).orElseThrow(
                 () -> new NullPointerException("해당 게시글을 찾을 수 없습니다.")
         );
+
+        if(!foundArticle.getNickname().equals(userDetails.getNickname())){
+            throw new IllegalArgumentException("게시글의 작성자만 삭제 할 수 있습니다.");
+        }
+
 
         HashMap<String, Long> responseId = new HashMap<>();
         responseId.put("postingId", foundArticle.getId());
@@ -163,7 +183,8 @@ public class ArticleService {
         LocalDate articleTime = LocalDate.from(foundArticle.getCreatedAt());
         Period period = Period.between(currentDateTime, articleTime);
         String dayBefore = "";
-        dayBefore += period.getDays();
+        int days = (period.getDays())*-1;
+        dayBefore += days;
         dayBefore += "일 전";
 
 
@@ -191,7 +212,8 @@ public class ArticleService {
             LocalDate articleTime = LocalDate.from(articleList.get(i).getCreatedAt());
             Period period = Period.between(currentDateTime, articleTime);
             String dayBefore = "";
-            dayBefore += period.getDays();
+            int days = (period.getDays())*-1;
+            dayBefore += days;
             dayBefore += "일 전";
             responseDto.setDayBefore(dayBefore);
             // 태그 빼서 리스트에 넣기
@@ -210,11 +232,10 @@ public class ArticleService {
             }
             responseDto.setThumnail(thumnail);
             // 유저 프로필이미지
-            String profileImage = "";
-            if(userRepository.findByNickname(articleList.get(i).getNickname()).getImgUrl() == null){
-                profileImage = null;
-            }else {
-                profileImage = userRepository.findByNickname(articleList.get(i).getNickname()).getImgUrl();
+            String profileImage = null;
+            User findUser = userRepository.findByNickname(articleList.get(i).getNickname());
+            if(findUser.getImgUrl() != null){
+                profileImage = findUser.getImgUrl();
             }
             responseDto.setProfileImage(profileImage);
             responseDto.setCommentCnt(articleList.get(i).getComments().size());
@@ -230,22 +251,22 @@ public class ArticleService {
 
     // 게시글 전체조회(트렌드, 옵션별)
     public AllArticleResponseDto trendArticles(String options) {
-        List<Article> articleList = new ArrayList<>();
+        List<Article> foundArticles = new ArrayList<>();
         LocalDateTime currentDateTime = LocalDateTime.now();
         System.out.println(currentDateTime);
         if (options.equals("today")) {
             System.out.println(currentDateTime.minusHours(24));
-            articleList = articleRepository.findAllByCreatedAtBetweenOrderByLikesDesc(currentDateTime.minusHours(24), LocalDateTime.now());
+            foundArticles = articleRepository.findByCreatedAtBetweenOrderByLikesDesc(currentDateTime.minusHours(24), LocalDateTime.now());
         }
         if (options.equals("week")) {
             System.out.println(currentDateTime.minusWeeks(1));
-            articleList = articleRepository.findAllByCreatedAtBetweenOrderByLikesDesc(currentDateTime.minusWeeks(1), LocalDateTime.now());
+            foundArticles = articleRepository.findByCreatedAtBetweenOrderByLikesDesc(currentDateTime.minusWeeks(1), LocalDateTime.now());
         }
         if (options.equals("month")) {
             System.out.println(currentDateTime.minusMonths(1));
-            articleList = articleRepository.findAllByCreatedAtBetweenOrderByLikesDesc(currentDateTime.minusMonths(1), LocalDateTime.now());
+            foundArticles = articleRepository.findByCreatedAtBetweenOrderByLikesDesc(currentDateTime.minusMonths(1), LocalDateTime.now());
         }
-
+        List<Article> articleList = foundArticles.stream().distinct().collect(Collectors.toList());
         List<ArticlesResponseDto> articlesResponseDtoList = new ArrayList<>();
         for(int i = 0; i < articleList.size(); i++) {
             // 리스트안에 담아줄 객체 생성
@@ -255,7 +276,8 @@ public class ArticleService {
             LocalDate articleTime = LocalDate.from(articleList.get(i).getCreatedAt());
             Period period = Period.between(nowTime, articleTime);
             String dayBefore = "";
-            dayBefore += period.getDays();
+            int days = (period.getDays())*-1;
+            dayBefore += days;
             dayBefore += "일 전";
             responseDto.setDayBefore(dayBefore);
             // 태그 빼서 리스트에 넣기
@@ -274,11 +296,10 @@ public class ArticleService {
             }
             responseDto.setThumnail(thumnail);
             // 유저 프로필이미지
-            String profileImage = "";
-            if(userRepository.findByNickname(articleList.get(i).getNickname()).getImgUrl() == null){
-                profileImage = null;
-            }else {
-                profileImage = userRepository.findByNickname(articleList.get(i).getNickname()).getImgUrl();
+            String profileImage = null;
+            User findUser = userRepository.findByNickname(articleList.get(i).getNickname());
+            if(findUser.getImgUrl() != null){
+                profileImage = findUser.getImgUrl();
             }
             responseDto.setProfileImage(profileImage);
             responseDto.setCommentCnt(articleList.get(i).getComments().size());
