@@ -33,7 +33,7 @@ public class LikesService {
     }
 
 
-    public String deleteLikes(LikesRequestDto requestDto){
+    public Long deleteLikes(LikesRequestDto requestDto){
         User user = userRepository.findByNickname(requestDto.getNickname());
         Article article = articleRepository.findById(requestDto.getPostingId()).orElseThrow(
                 () -> new IllegalArgumentException("포스팅이 존재하지 않습니다. ")
@@ -43,10 +43,12 @@ public class LikesService {
         Long deleteAriticleId = article.getId();
 
         List<Likes> likesList= likesRepository.findAllByUserIdAndArticleId(deleteUserId, deleteAriticleId);
+        System.out.println(likesList.get(0).getLikeId());
 
         Long deleteLikesId = likesList.get(0).getLikeId();
         likesRepository.deleteById(deleteLikesId);
 
-        return  "{\"response\":\"true\"}";
+        return  deleteLikesId;
     }
+
 }
