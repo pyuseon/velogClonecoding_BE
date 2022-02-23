@@ -60,16 +60,6 @@ public class UserController {
         System.out.println("nickname : " + user.getNickname());
         System.out.println(user.getImgUrl());
         System.out.println(user.getLikes().size());
-//        String imgUrl = user.getImgUrl();
-//        List<Likes> likesList = user.getLikes();
-//
-//        List<Long> userLikes = new ArrayList<>();
-//        for(Likes targetLike : likesList){
-//            Long postingId = targetLike.getArticle().getId();
-//            System.out.println(postingId);
-//            userLikes.add(postingId);
-//        }
-//        return new UserResponseDto(user.getUsername(), user.getNickname(), imgUrl, userLikes);
         return userService.getInfo(user);
     }
 
