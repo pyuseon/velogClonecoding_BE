@@ -15,6 +15,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -35,10 +36,10 @@ public class UserController {
 
         System.out.println(multipartFile);
         SignupRequestDto requestDto = new SignupRequestDto(username, nickname, password);
-        // 기본 이미지
 
-//        String imgUrl = "https://bookcafe-bucket.s3.ap-northeast-2.amazonaws.com/signup/ca0d237c-6f48-42a2-a04b-bd999ea3b9f5noImage.png";
-        String imgUrl = null;
+        // 기본 이미지
+        String imgUrl = "https://bookcafe-bucket.s3.ap-northeast-2.amazonaws.com/signup/ca0d237c-6f48-42a2-a04b-bd999ea3b9f5noImage.png";
+        // 프로필 업로드 시 프로필 이미지로 업로드
         if(!multipartFile.isEmpty()){
             imgUrl = s3Uploader.upload(multipartFile, "signup");
         }
@@ -53,12 +54,14 @@ public class UserController {
         User user = userDetails.getUser();
         System.out.println("username : " + user.getUsername());
         System.out.println("nickname : " + user.getNickname());
+        System.out.println(user.getImgUrl());
         String imgUrl = user.getImgUrl();
-
-        if(user.getImgUrl() == null){
-            // 이미지 없으면 기본이미지로 반환
-            imgUrl = "https://bookcafe-bucket.s3.ap-northeast-2.amazonaws.com/signup/ca0d237c-6f48-42a2-a04b-bd999ea3b9f5noImage.png";
-        }
+//
+//        if(imgUrl == null){
+//            // 이미지 없으면 기본이미지로 반환
+//            imgUrl = "https://bookcafe-bucket.s3.ap-northeast-2.amazonaws.com/signup/ca0d237c-6f48-42a2-a04b-bd999ea3b9f5noImage.png";
+//        }
+//        System.out.println(imgUrl);
 
         return new UserResponseDto(user.getUsername(), user.getNickname(), imgUrl);
     }
@@ -86,7 +89,9 @@ public class UserController {
         User user =  userRepository.findById(userId).orElseThrow(
                 () -> new IllegalArgumentException("모임이 존재하지 않습니다. ")
         );
-        s3Uploader.deleteS3(user.getImgUrl());
+        if(!Objects.equals(user.getImgUrl(), "https://bookcafe-bucket.s3.ap-northeast-2.amazonaws.com/signup/ca0d237c-6f48-42a2-a04b-bd999ea3b9f5noImage.png")){
+            s3Uploader.deleteS3(user.getImgUrl());
+        }
         userRepository.deleteById(userId);
         return userId;
     }
