@@ -1,6 +1,6 @@
 package com.clonecoding.velogclone_be.model;
 
-import com.clonecoding.velogclone_be.dto.article.ArticleRequestDto;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,14 +16,12 @@ public class Likes {
     private Long likeId;
 
     @JsonBackReference
-//    @ManyToOne(cascade = CascadeType.ALL)
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
 
 
     @JsonBackReference
-//    @ManyToOne(cascade = CascadeType.ALL)
     @ManyToOne
     @JoinColumn(name = "ARTICLE_ID")
     private Article article;

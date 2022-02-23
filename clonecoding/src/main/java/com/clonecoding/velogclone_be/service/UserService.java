@@ -1,11 +1,17 @@
 package com.clonecoding.velogclone_be.service;
 
 import com.clonecoding.velogclone_be.dto.user.SignupRequestDto;
+import com.clonecoding.velogclone_be.dto.user.UserResponseDto;
+import com.clonecoding.velogclone_be.model.Likes;
 import com.clonecoding.velogclone_be.model.User;
 import com.clonecoding.velogclone_be.repository.UserRepository;;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -13,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
 
     public void registerUser(SignupRequestDto requestDto, String imgUrl) {
 
@@ -45,5 +52,18 @@ public class UserService {
             throw new IllegalArgumentException("비밀번호 불일치");
         }
         return user;
+    }
+
+    public UserResponseDto getInfo(User user){
+        String imgUrl = user.getImgUrl();
+        List<Likes> likesList = user.getLikes();
+
+        List<Long> userLikes = new ArrayList<>();
+        for(Likes targetLike : likesList){
+            Long postingId = targetLike.getArticle().getId();
+            System.out.println(postingId);
+            userLikes.add(postingId);
+        }
+        return new UserResponseDto(user.getUsername(), user.getNickname(), imgUrl, userLikes);
     }
 }

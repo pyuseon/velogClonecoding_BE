@@ -30,6 +30,7 @@ public class ArticleService {
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
 
+
     // 게시글 생성
     public ArticleResponseDto creatArticle(ArticleRequestDto requestDto, UserDetailsImpl userDetails) {
         // 로그인 사용자와 게시글 닉네임 비교
@@ -301,7 +302,10 @@ public class ArticleService {
             // 유저 프로필이미지
             String profileImage = null;
             User findUser = userRepository.findByNickname(articleList.get(i).getNickname());
+            System.out.println(findUser.getImgUrl());
+
             if(findUser.getImgUrl() != null){
+                System.out.println(findUser.getNickname());
                 profileImage = findUser.getImgUrl();
             }
             responseDto.setProfileImage(profileImage);
