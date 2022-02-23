@@ -302,10 +302,8 @@ public class ArticleService {
             // 유저 프로필이미지
             String profileImage = null;
             User findUser = userRepository.findByNickname(articleList.get(i).getNickname());
-            System.out.println(findUser.getImgUrl());
 
             if(findUser.getImgUrl() != null){
-                System.out.println(findUser.getNickname());
                 profileImage = findUser.getImgUrl();
             }
             responseDto.setProfileImage(profileImage);

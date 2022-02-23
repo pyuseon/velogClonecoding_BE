@@ -29,7 +29,7 @@ public class User  {
 
     @JsonManagedReference
 //    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", orphanRemoval = true,  fetch = FetchType.EAGER)
     private List<Likes> likes;
 
 

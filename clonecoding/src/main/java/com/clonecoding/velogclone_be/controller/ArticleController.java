@@ -10,15 +10,10 @@ import com.clonecoding.velogclone_be.dto.article.ArticleRequestDto;
 import com.clonecoding.velogclone_be.dto.article.ArticleResponseDto;
 import com.clonecoding.velogclone_be.dto.article.DetailArticleResponseDto;
 import com.clonecoding.velogclone_be.security.UserDetailsImpl;
-import com.clonecoding.velogclone_be.service.ArticleService;
-import com.clonecoding.velogclone_be.service.S3Uploader;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 

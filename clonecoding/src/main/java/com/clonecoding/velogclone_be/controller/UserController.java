@@ -41,12 +41,14 @@ public class UserController {
         System.out.println(multipartFile);
         SignupRequestDto requestDto = new SignupRequestDto(username, nickname, password);
 
+
         // 기본 이미지
         String imgUrl = "https://bookcafe-bucket.s3.ap-northeast-2.amazonaws.com/signup/ca0d237c-6f48-42a2-a04b-bd999ea3b9f5noImage.png";
         // 프로필 업로드 시 프로필 이미지로 업로드
-        if(!multipartFile.isEmpty()){
+        if(multipartFile != null && !multipartFile.isEmpty()){
             imgUrl = s3Uploader.upload(multipartFile, "signup");
         }
+        System.out.println(imgUrl);
 
         userService.registerUser(requestDto, imgUrl);
         return "회원가입 성공!";
