@@ -11,6 +11,9 @@ import com.clonecoding.velogclone_be.service.LikesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -28,10 +31,9 @@ public class LikesController {
     }
 
 
-
     // 좋아요 취소
     @DeleteMapping("/api/unlike")
-    public String deletLikes(@RequestBody LikesRequestDto requestDto){
+    public Long deleteLikes(@RequestBody LikesRequestDto requestDto) {
         return likesService.deleteLikes(requestDto);
     }
 
