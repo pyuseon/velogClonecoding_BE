@@ -74,10 +74,10 @@ public class ArticleController {
         return imgUrl;
     }
 
-//    // 내가 작성한 게시글 목록 조회
-//    @GetMapping("/api/mypage/{nickname}")
-//    public ResponseEntity<List<MyArticlesResponseDto>> getMyArticles(@PathVariable String nickname){
-//        List<MyArticlesResponseDto> myArticlesResponseDtoList = articleService.getMyArticles(nickname);
-//        return ResponseEntity.ok(myArticlesResponseDtoList);
-//    }
+    // 내가 작성한 게시글 목록 조회
+    @GetMapping("/api/mypage/{nickname}")
+    public ResponseEntity<List<MyArticlesResponseDto>> getMyArticles(@PathVariable String nickname){
+        List<MyArticlesResponseDto> myArticlesResponseDtoList = articleService.getMyArticles(nickname);
+        return ResponseEntity.ok(myArticlesResponseDtoList);
+    }
 }
