@@ -1,6 +1,8 @@
 package com.clonecoding.velogclone_be.controller;
 
-import com.clonecoding.velogclone_be.dto.CommentRequestDto;
+import com.clonecoding.velogclone_be.dto.comment.CommentRequestDto;
+import com.clonecoding.velogclone_be.dto.comment.CommentResponseDto;
+import com.clonecoding.velogclone_be.dto.comment.CreatCommentResponseDto;
 import com.clonecoding.velogclone_be.repository.CommentRepository;
 import com.clonecoding.velogclone_be.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -17,23 +19,23 @@ public class CommentController {
 
     //댓글 작성
     @PostMapping("/api/comment")
-    public String creatComment(@RequestBody CommentRequestDto commentRequestDto){
-        commentService.creatComment(commentRequestDto);
-        return "댓글 작성이 완료되었습니다.";
+    public CreatCommentResponseDto creatComment(@RequestBody CommentRequestDto commentRequestDto){
+        return commentService.creatComment(commentRequestDto);
+
     }
+
     //댓글 수정
     @PutMapping("/api/comment/{commentId}")
     public String updateComment(@PathVariable Long commentId, @RequestBody CommentRequestDto commentRequestDto){
         commentService.updataComment(commentId, commentRequestDto);
         return "댓글 수정이 완료되었습니다.";
     }
+
     //댓글 삭제
     @DeleteMapping("/api/comment/{commentId}")
     public String deleteComment(@PathVariable Long commentId){
         commentRepository.deleteById(commentId);
         return "댓글 삭제가 완료되었습니다.";
     }
-
-
 
 }

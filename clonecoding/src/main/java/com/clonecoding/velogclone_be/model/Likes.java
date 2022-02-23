@@ -16,13 +16,15 @@ public class Likes {
     private Long likeId;
 
     @JsonBackReference
-    @ManyToOne(cascade = CascadeType.ALL)
+//    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
 
 
     @JsonBackReference
-    @ManyToOne(cascade = CascadeType.ALL)
+//    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "ARTICLE_ID")
     private Article article;
 
