@@ -2,6 +2,7 @@ package com.clonecoding.velogclone_be.controller;
 
 import com.clonecoding.velogclone_be.dto.user.SignupRequestDto;
 import com.clonecoding.velogclone_be.dto.user.UserResponseDto;
+import com.clonecoding.velogclone_be.model.Likes;
 import com.clonecoding.velogclone_be.model.User;
 import com.clonecoding.velogclone_be.repository.UserRepository;
 import com.clonecoding.velogclone_be.security.UserDetailsImpl;
@@ -13,8 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import javax.security.auth.message.MessagePolicy;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -55,15 +59,8 @@ public class UserController {
         System.out.println("username : " + user.getUsername());
         System.out.println("nickname : " + user.getNickname());
         System.out.println(user.getImgUrl());
-        String imgUrl = user.getImgUrl();
-//
-//        if(imgUrl == null){
-//            // 이미지 없으면 기본이미지로 반환
-//            imgUrl = "https://bookcafe-bucket.s3.ap-northeast-2.amazonaws.com/signup/ca0d237c-6f48-42a2-a04b-bd999ea3b9f5noImage.png";
-//        }
-//        System.out.println(imgUrl);
-
-        return new UserResponseDto(user.getUsername(), user.getNickname(), imgUrl);
+        System.out.println(user.getLikes().size());
+        return userService.getInfo(user);
     }
 
 
