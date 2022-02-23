@@ -28,7 +28,7 @@ public class User  {
     private String imgUrl;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Likes> likes;
 
 
