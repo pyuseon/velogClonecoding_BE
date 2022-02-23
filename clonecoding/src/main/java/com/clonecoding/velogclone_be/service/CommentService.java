@@ -1,7 +1,8 @@
 package com.clonecoding.velogclone_be.service;
 
-import com.clonecoding.velogclone_be.dto.CommentRequestDto;
-import com.clonecoding.velogclone_be.dto.CommentResponseDto;
+import com.clonecoding.velogclone_be.dto.comment.CommentRequestDto;
+import com.clonecoding.velogclone_be.dto.comment.CommentResponseDto;
+import com.clonecoding.velogclone_be.dto.comment.CreatCommentResponseDto;
 import com.clonecoding.velogclone_be.model.Article;
 import com.clonecoding.velogclone_be.model.Comment;
 import com.clonecoding.velogclone_be.repository.ArticleRepository;
@@ -9,6 +10,8 @@ import com.clonecoding.velogclone_be.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.format.DateTimeFormatter;
 
 
 @Service
@@ -20,19 +23,19 @@ public class CommentService {
 
     //댓글 작성
     @Transactional
-    public CommentResponseDto creatComment(CommentRequestDto commentRequestDto){
+    public CreatCommentResponseDto creatComment(CommentRequestDto commentRequestDto){
         Article article = articleRepository.findById(commentRequestDto.getPostingId()).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 게시글 입니다.")
         );
         Comment comment = new Comment(commentRequestDto.getNickname(), commentRequestDto.getComment(), article);
         commentRepository.save(comment);
 
-        CommentResponseDto commentResponseDto = new CommentResponseDto();
-        commentResponseDto.setCommentId(comment.getCommentId());
-        commentResponseDto.setDate(String.valueOf(comment.getCreatedAt()));
-        commentResponseDto.setMsg("댓글 작성이 완료되었습니다.");
+        CreatCommentResponseDto creatCommentResponseDto = new CreatCommentResponseDto();
+        creatCommentResponseDto.setCommentId(comment.getCommentId());
+        creatCommentResponseDto.setCreatedAtComment(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(comment.getCreatedAt()));
+        creatCommentResponseDto.setMsg("댓글 작성이 완료되었습니다.");
 
-        return commentResponseDto;
+        return creatCommentResponseDto;
     }
 
     //댓글 수정

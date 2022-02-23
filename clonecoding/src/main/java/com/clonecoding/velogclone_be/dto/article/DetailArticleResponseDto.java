@@ -1,9 +1,7 @@
 package com.clonecoding.velogclone_be.dto.article;
 
-import com.clonecoding.velogclone_be.dto.CommentResponseDto;
+import com.clonecoding.velogclone_be.dto.comment.CommentResponseDto;
 import com.clonecoding.velogclone_be.model.Article;
-import com.clonecoding.velogclone_be.model.Comment;
-import com.clonecoding.velogclone_be.model.Image;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,13 +1,12 @@
 package com.clonecoding.velogclone_be.service;
 
-import com.clonecoding.velogclone_be.dto.CommentResponseDto;
+import com.clonecoding.velogclone_be.dto.comment.CommentResponseDto;
 import com.clonecoding.velogclone_be.dto.article.*;
 import com.clonecoding.velogclone_be.model.*;
 import com.clonecoding.velogclone_be.repository.*;
 import com.clonecoding.velogclone_be.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -15,7 +14,6 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -396,9 +394,12 @@ public class ArticleService {
 //        List<MyArticlesResponseDto> responseDtoList = new ArrayList<>();
 //
 //        //nickname 가진 유저
-//        User user = userRepository.findByNickname(nickname).orElseThrow(
-//                () -> new IllegalArgumentException("탈퇴한 회원입니다.")
-//        );
+//        User user = userRepository.findByNickname(nickname);
+//
+//        if(user == null) {
+//            throw new IllegalArgumentException("탈퇴한 회원입니다.");
+//        }
+//
 //        List<Article> articleList = articleRepository.findAllByNickname(nickname);
 //
 //        for(Article eachArticle : articleList){
@@ -412,7 +413,6 @@ public class ArticleService {
 //            }else {
 //                thumnail = eachArticle.getImageFiles().get(0).getImageFile();
 //            }
-//
 //            LocalDate currentDateTime = LocalDate.from(LocalDateTime.now());
 //            LocalDate articleTime = LocalDate.from(articleList.get(i).getCreatedAt());
 //            Period period = Period.between(currentDateTime, articleTime);
