@@ -211,17 +211,19 @@ public class ArticleService {
         LocalDate articleTime = LocalDate.from(foundArticle.getCreatedAt());
         Period period = Period.between(currentDateTime, articleTime);
         String dayBefore = "";
-        int days = (period.getDays())*-1;
+        int days = Math.abs(period.getDays());
         if(days < 1){
             LocalDateTime nowTime = LocalDateTime.now();
             LocalDateTime createdTime = foundArticle.getCreatedAt();
             Duration duration = Duration.between(nowTime, createdTime);
             int time = (int) duration.getSeconds();
-            dayBefore += (time/3600)*-1;
+            dayBefore += Math.abs(time/3600);
             dayBefore += "시간 전";
-        }else {
+        }else if( days < 8){
             dayBefore += days;
             dayBefore += "일 전";
+        }else {
+            dayBefore += articleTime;
         }
 
 
@@ -277,11 +279,13 @@ public class ArticleService {
                 LocalDateTime createdTime = articleList.get(i).getCreatedAt();
                 Duration duration = Duration.between(nowTime, createdTime);
                 int time = (int) duration.getSeconds();
-                dayBefore += (time/3600)*-1;
+                dayBefore += Math.abs(time/3600);
                 dayBefore += "시간 전";
-            }else {
+            }else if( days < 8){
                 dayBefore += days;
                 dayBefore += "일 전";
+            }else {
+                dayBefore += articleTime;
             }
             responseDto.setDayBefore(dayBefore);
             // 태그 빼서 리스트에 넣기
@@ -351,11 +355,13 @@ public class ArticleService {
                 LocalDateTime createdTime = articleList.get(i).getCreatedAt();
                 Duration duration = Duration.between(nowTime2, createdTime);
                 int time = (int) duration.getSeconds();
-                dayBefore += (time/3600)*-1;
+                dayBefore += Math.abs(time/3600);
                 dayBefore += "시간 전";
-            }else {
+            }else if( days < 8){
                 dayBefore += days;
                 dayBefore += "일 전";
+            }else {
+                dayBefore += articleTime;
             }
             responseDto.setDayBefore(dayBefore);
             // 태그 빼서 리스트에 넣기
@@ -428,11 +434,13 @@ public class ArticleService {
                 LocalDateTime createdTime = eachArticle.getCreatedAt();
                 Duration duration = Duration.between(nowTime, createdTime);
                 int time = (int) duration.getSeconds();
-                dayBefore += (time/3600)*-1;
+                dayBefore += Math.abs(time/3600);
                 dayBefore += "시간 전";
-            } else {
+            }else if( days < 8){
                 dayBefore += days;
                 dayBefore += "일 전";
+            }else {
+                dayBefore += articleTime;
             }
 
             List<ArticleTag> articleTags = articleTagRepository.findAllByArticle_Id(postingId);
