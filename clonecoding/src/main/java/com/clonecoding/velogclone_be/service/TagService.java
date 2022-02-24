@@ -64,11 +64,13 @@ public class TagService {
                     LocalDateTime createdTime = article.getCreatedAt();
                     Duration duration = Duration.between(nowTime, createdTime);
                     int time = (int) duration.getSeconds();
-                    dayBefore += (time/3600)*-1;
+                    dayBefore += Math.abs(time/3600);
                     dayBefore += "시간 전";
-                } else {
+                }else if( days < 8){
                     dayBefore += days;
                     dayBefore += "일 전";
+                }else {
+                    dayBefore += articleTime;
                 }
 
                 String profileImage = null;
